@@ -1,0 +1,27 @@
+# Dépendances
+node_modules/
+
+# Build Next.js
+.next/
+out/
+dist/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environnements
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Systèmes
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-data/
+
