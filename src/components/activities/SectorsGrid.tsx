@@ -3,56 +3,56 @@ const sectors = [
     title: "Formation & Apprentissage",
     description:
       "Programmes de formation continue, renforcement de capacités, insertion professionnelle.",
-    image: "/images/activities/formation.jpg",
+    image: "/Formation&apprentissage.jpg",
     link: "/fr/activities/formation-apprentissage",
   },
   {
     title: "Technologie & Innovation Digitale",
     description:
       "Solutions numériques, développement web, outils digitaux, automatisation.",
-    image: "/images/activities/technologie.jpg",
+    image: "/technologie_innovations.jpg",
     link: "/fr/activities/technologie-innovation",
   },
   {
     title: "Agriculture",
     description:
       "Production agricole, plantations, gestion durable des ressources.",
-    image: "/images/activities/agriculture.jpg",
+    image: "/agriculture.jpg",
     link: "/fr/activities/agriculture",
   },
   {
     title: "Élevage",
     description:
       "Production animale, gestion de cheptel, élevage moderne.",
-    image: "/images/activities/elevage.jpg",
+    image: "/elevage.jpg",
     link: "/fr/activities/elevage",
   },
   {
     title: "Industrie & Transformation",
     description:
       "Transformation agroalimentaire, production locale, valorisation des ressources.",
-    image: "/images/activities/industrie.jpg",
+    image: "/industries.jpeg",
     link: "/fr/activities/industrie",
   },
   {
     title: "Import‑Export",
     description:
       "Commerce international, logistique, distribution de produits.",
-    image: "/images/activities/import-export.jpg",
+    image: "/import_export.jpg",
     link: "/fr/activities/import-export",
   },
   {
     title: "Voyages & Accompagnement Administratif",
     description:
       "Assistance voyage, documents administratifs, mobilité internationale.",
-    image: "/images/activities/voyages.jpg",
+    image: "/voyages.jpg",
     link: "/fr/activities/voyages",
   },
   {
     title: "Services Divers",
     description:
       "Prestations multiservices pour particuliers et entreprises.",
-    image: "/images/activities/services.jpg",
+    image: "/prestation_servive.jpg",
     link: "/fr/activities/services-divers",
   },
 ];

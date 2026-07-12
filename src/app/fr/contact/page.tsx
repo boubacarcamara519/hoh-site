@@ -1,6 +1,7 @@
 import ContactInfo from "@/components/contact/ContactInfo";
 import ContactMap from "@/components/contact/ContactMap";
 import ContactForm from "@/components/contact/ContactForm";
+import NewsletterForm from "@/components/newsletter/NewsletterForm";
 
 export default function ContactPage() {
   return (
@@ -37,6 +38,18 @@ export default function ContactPage() {
       {/* FORM */}
       <section className="container mx-auto px-6 max-w-5xl py-12">
         <ContactForm />
+      </section>
+
+      {/* NEWSLETTER */}
+      <section className="container mx-auto px-6 max-w-3xl py-16 border-t">
+        <h3 className="text-2xl font-semibold text-blue-800 text-center mb-4">
+          Abonnez‑vous à notre newsletter
+        </h3>
+        <p className="text-slate-600 text-center mb-6">
+          Recevez les actualités, projets et actions de Hope Of Horizons Group directement dans votre boîte mail.
+        </p>
+
+        <NewsletterForm />
       </section>
 
       {/* CONFIDENTIALITÉ */}

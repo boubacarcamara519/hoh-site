@@ -1,28 +1,60 @@
 "use client";
 
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const links = [
-  { href: "/fr/home", label: "Accueil" },
-  { href: "/fr/about", label: "À propos" },
-  { href: "/fr/activities", label: "Activités" },
-  { href: "/fr/impact", label: "Impact" },
-  { href: "/fr/forms", label: "Formulaires" },
-  { href: "/fr/contact", label: "Contact" }
-];
+import Image from "next/image";
+import { useState } from "react";
 
 export default function Header() {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+
+  const isEnglish = pathname.startsWith("/en");
+
+  const links = isEnglish
+    ? [
+        { href: "/en/home", label: "Home" },
+        { href: "/en/about", label: "About" },
+        { href: "/en/activities", label: "Activities" },
+        { href: "/en/impact", label: "Impact" },
+        { href: "/en/forms", label: "Forms" },
+        { href: "/en/contact", label: "Contact" }
+      ]
+    : [
+        { href: "/fr/home", label: "Accueil" },
+        { href: "/fr/about", label: "À propos" },
+        { href: "/fr/activities", label: "Activités" },
+        { href: "/fr/impact", label: "Impact" },
+        { href: "/fr/forms", label: "Formulaires" },
+        { href: "/fr/contact", label: "Contact" }
+      ];
 
   return (
     <header className="bg-white border-b shadow-sm">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold text-blue-700">
-          HOH Group
+
+        {/* LOGO + NOM COMPLET */}
+        <Link href={isEnglish ? "/en/home" : "/fr/home"} className="flex items-center gap-3">
+          <Image
+            src="/hoh-logo.jpg"
+            alt="Hope Of Horizons Group"
+            width={120}
+            height={60}
+            priority
+          />
+          <div className="flex flex-col">
+            <span className="text-lg font-bold text-gray-800">
+              Hope Of Horizons Group
+            </span>
+            <span className="text-xs text-gray-500">
+              L’action locale, l’impact global
+            </span>
+          </div>
         </Link>
 
-        <nav className="flex gap-6">
+        {/* MENU DESKTOP */}
+        <nav className="hidden md:flex items-center gap-6">
           {links.map((link) => (
             <Link
               key={link.href}
@@ -36,7 +68,70 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
+
+          <LanguageSwitcher />
         </nav>
+
+        {/* BOUTON HAMBURGER MOBILE */}
+        <button
+          onClick={() => setOpen(true)}
+          className="md:hidden text-blue-900 focus:outline-none"
+        >
+          <svg width="32" height="32" fill="currentColor">
+            <path d="M4 8h24M4 16h24M4 24h24" />
+          </svg>
+        </button>
+      </div>
+
+      {/* OVERLAY */}
+      {open && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setOpen(false)}
+        />
+      )}
+
+      {/* MENU MOBILE */}
+      <div
+        className={`fixed top-0 right-0 w-72 h-full bg-white shadow-lg z-50 transform transition-transform md:hidden ${
+          open ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="p-6 flex flex-col gap-6">
+
+          {/* BOUTON FERMER */}
+          <button
+            onClick={() => setOpen(false)}
+            className="self-end text-slate-600"
+          >
+            <svg width="28" height="28" fill="currentColor">
+              <path d="M6 6l16 16M22 6L6 22" />
+            </svg>
+          </button>
+
+          {/* LIENS MOBILE */}
+          <nav className="flex flex-col gap-4">
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                className={`text-lg font-medium ${
+                  pathname === link.href
+                    ? "text-blue-700 underline"
+                    : "text-slate-700"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* LANG SWITCHER */}
+          <div className="pt-4 border-t">
+            <LanguageSwitcher />
+          </div>
+        </div>
       </div>
     </header>
   );

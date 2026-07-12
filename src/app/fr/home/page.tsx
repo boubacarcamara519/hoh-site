@@ -25,7 +25,7 @@ export default function HomePage() {
             Nous contacter
           </a>
           <a
-            href="/fr/forms"
+            href="/fr/partenariat"
             className="bg-green-500 text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-green-600 transition"
           >
             Devenir partenaire

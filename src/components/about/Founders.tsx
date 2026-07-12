@@ -7,9 +7,9 @@ export default function Founders() {
 
         <div className="bg-white border rounded-lg p-4 shadow-sm">
           <img
-            src="/founders/moussa.jpg"
+            src="/dg.jpg"
             alt="Moussa Camara"
-            className="rounded mb-3 w-full h-64 object-cover"
+            className="rounded mb-3 w-full h-74 object-cover"
           />
           <h3 className="font-semibold text-lg">Moussa Camara</h3>
           <p className="text-sm text-slate-700">Stratégie, Partenariats & Rayonnement</p>
@@ -17,9 +17,9 @@ export default function Founders() {
 
         <div className="bg-white border rounded-lg p-4 shadow-sm">
           <img
-            src="/founders/alseny.jpg"
+            src="/dga.jpg"
             alt="Alseny Cissé"
-            className="rounded mb-3 w-full h-64 object-cover"
+            className="rounded mb-3 w-full h-74 object-cover"
           />
           <h3 className="font-semibold text-lg">Alseny Cissé</h3>
           <p className="text-sm text-slate-700">Opérations, Développement & Territoires</p>

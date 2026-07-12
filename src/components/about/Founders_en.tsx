@@ -1,0 +1,36 @@
+export default function Founders() {
+  return (
+    <section>
+      <h2 className="text-2xl font-bold mb-6">The Founders</h2>
+
+      <div className="grid md:grid-cols-2 gap-8">
+
+        <div className="bg-white border rounded-lg p-4 shadow-sm">
+          <img
+            src="/dg.jpg"
+            alt="Moussa Camara"
+            className="rounded mb-3 w-full h-74 object-cover"
+          />
+          <h3 className="font-semibold text-lg">Moussa Camara</h3>
+          <p className="text-sm text-slate-700">
+            Strategy, Partnerships & Outreach
+          </p>
+        </div>
+
+        <div className="bg-white border rounded-lg p-4 shadow-sm">
+          <img
+            src="/dga.jpg"
+            alt="Alseny Cissé"
+            className="rounded mb-3 w-full h-74 object-cover"
+          />
+          <h3 className="font-semibold text-lg">Alseny Cissé</h3>
+          <p className="text-sm text-slate-700">
+            Operations, Development & Territories
+          </p>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
