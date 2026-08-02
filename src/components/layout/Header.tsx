@@ -70,7 +70,7 @@ export default function Header() {
 	</div>
 
         {/* MENU DESKTOP — INTACT */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-6 whitespace-nowrap">
           {links.map((link) => (
             <Link
               key={link.href}
