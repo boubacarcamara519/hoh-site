@@ -35,26 +35,39 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
 
         {/* LOGO + NOM COMPLET — INTACT */}
-        <Link
-	  href={isEnglish ? "/en/home" : "/fr/home"}
-	  className="flex items-center gap-3 max-w-[70%] md:max-w-none"
-	>
-	  <Image
-	    src="/hoh-logo.jpg"
-	    alt="Hope Of Horizons Group"
-	    width={80}
-	    height={40}
-	    priority
-	  />
-	  <div className="flex flex-col">
-	    <span className="text-lg font-bold text-gray-800">
-	      Hope Of Horizons Group
-	    </span>
-	    <span className="text-xs text-gray-500 hidden sm:block">
-	      L’action locale, l’impact global
-	    </span>
-	  </div>
-	</Link>
+	<div className="container mx-auto px-4 py-4 flex items-center justify-between relative">
+	  {/* LOGO */}
+	  <Link
+	    href={isEnglish ? "/en/home" : "/fr/home"}
+	    className="flex items-center gap-3 max-w-[65%] md:max-w-none"
+	  >
+	    <Image
+	      src="/hoh-logo.jpg"
+	      alt="Hope Of Horizons Group"
+	      width={80}
+	      height={40}
+	      priority
+	    />
+	    <div className="flex flex-col">
+	      <span className="text-lg font-bold text-gray-800">
+		Hope Of Horizons Group
+	      </span>
+	      <span className="text-xs text-gray-500 hidden sm:block">
+		L’action locale, l’impact global
+	      </span>
+	    </div>
+	  </Link>
+
+	  {/* BOUTON HAMBURGER MOBILE */}
+	  <button
+	    onClick={() => setOpen(true)}
+	    className="md:hidden text-blue-900 focus:outline-none absolute right-4"
+	  >
+	    <svg width="32" height="32" fill="currentColor">
+	      <path d="M4 8h24M4 16h24M4 24h24" />
+	    </svg>
+	  </button>
+	</div>
 
         {/* MENU DESKTOP — INTACT */}
         <nav className="hidden md:flex items-center gap-6">
