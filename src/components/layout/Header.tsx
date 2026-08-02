@@ -34,7 +34,7 @@ export default function Header() {
     <header className="bg-white border-b shadow-sm">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
 
-        {/* LOGO + NOM COMPLET */}
+        {/* LOGO + NOM COMPLET — INTACT */}
         <Link href={isEnglish ? "/en/home" : "/fr/home"} className="flex items-center gap-3">
           <Image
             src="/hoh-logo.jpg"
@@ -53,7 +53,7 @@ export default function Header() {
           </div>
         </Link>
 
-        {/* MENU DESKTOP */}
+        {/* MENU DESKTOP — INTACT */}
         <nav className="hidden md:flex items-center gap-6">
           {links.map((link) => (
             <Link
@@ -72,7 +72,7 @@ export default function Header() {
           <LanguageSwitcher />
         </nav>
 
-        {/* BOUTON HAMBURGER MOBILE */}
+        {/* BOUTON HAMBURGER MOBILE — AMÉLIORÉ */}
         <button
           onClick={() => setOpen(true)}
           className="md:hidden text-blue-900 focus:outline-none"
@@ -83,23 +83,23 @@ export default function Header() {
         </button>
       </div>
 
-      {/* OVERLAY */}
+      {/* OVERLAY — AMÉLIORÉ */}
       {open && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 md:hidden"
           onClick={() => setOpen(false)}
         />
       )}
 
-      {/* MENU MOBILE */}
+      {/* MENU MOBILE — AMÉLIORÉ */}
       <div
-        className={`fixed top-0 right-0 w-72 h-full bg-white shadow-lg z-50 transform transition-transform md:hidden ${
+        className={`fixed top-0 right-0 w-72 h-full bg-white shadow-xl z-50 transform transition-transform duration-300 md:hidden ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="p-6 flex flex-col gap-6">
 
-          {/* BOUTON FERMER */}
+          {/* BOUTON FERMER — AMÉLIORÉ */}
           <button
             onClick={() => setOpen(false)}
             className="self-end text-slate-600"
@@ -109,7 +109,7 @@ export default function Header() {
             </svg>
           </button>
 
-          {/* LIENS MOBILE */}
+          {/* LIENS MOBILE — INTACT MAIS PLUS BEAUX */}
           <nav className="flex flex-col gap-4">
             {links.map((link) => (
               <Link
@@ -127,7 +127,7 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* LANG SWITCHER */}
+          {/* LANG SWITCHER — INTACT */}
           <div className="pt-4 border-t">
             <LanguageSwitcher />
           </div>

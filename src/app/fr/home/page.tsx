@@ -88,7 +88,9 @@ export default function HomePage() {
           {[
             { title: "Formation & Apprentissage", link: "/fr/activities/formation-apprentissage" },
             { title: "Technologie & Innovation Digitale", link: "/fr/activities/technologie-innovation" },
-            { title: "Agriculture, Élevage & Industrie", link: "/fr/activities/agriculture-elevage-industrie" },
+            { title: "Agriculture", link: "/fr/activities/agriculture" },
+            { title: "Élevage", link: "/fr/activities/elevage" },
+            { title: "Industrie", link: "/fr/activities/industrie" },
             { title: "Import-Export", link: "/fr/activities/import-export" },
             { title: "Voyages & Accompagnement Administratif", link: "/fr/activities/voyages" },
             { title: "Services Divers", link: "/fr/activities/services-divers" },

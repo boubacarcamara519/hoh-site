@@ -8,13 +8,13 @@ export default function ContactInfo() {
           <span className="font-semibold">Address:</span> Matoto, Conakry, Guinea
         </p>
         <p>
-          <span className="font-semibold">Phone:</span> +224 XX XX XX XX
+          <span className="font-semibold">Phone:</span> +224 613 61 50 86
         </p>
         <p>
-          <span className="font-semibold">WhatsApp:</span> +224 XX XX XX XX
+          <span className="font-semibold">WhatsApp:</span> +224 613 61 50 86
         </p>
         <p>
-          <span className="font-semibold">Email:</span> contact@hoh-group.com
+          <span className="font-semibold">Email:</span> hopeofhorizonsgroup2025@gmai.com
         </p>
       </div>
     </section>

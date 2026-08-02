@@ -78,7 +78,7 @@ export default function ImpactPage() {
         </h2>
 
         <img
-          src="/images/impact/carte-guinee.png"
+          src="/guinee_map.png"
           alt="Carte des zones d'intervention HOH"
           className="w-full max-w-3xl mx-auto mb-10 rounded-lg shadow"
         />

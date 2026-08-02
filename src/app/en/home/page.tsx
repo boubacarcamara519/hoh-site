@@ -88,10 +88,12 @@ export default function HomePage() {
           {[
             { title: "Training & Learning", link: "/en/activities/training-learning" },
             { title: "Technology & Digital Innovation", link: "/en/activities/technology-innovation" },
-            { title: "Agriculture, Livestock & Industry", link: "/en/activities/agriculture-livestock-industry" },
-            { title: "Import-Export", link: "/en/activities/import-export" },
-            { title: "Travel & Administrative Support", link: "/en/activities/travel" },
-            { title: "General Services", link: "/en/activities/general-services" },
+            { title: "Agriculture", link: "/en/activities/agriculture_en" },
+            { title: "Livestock", link: "/en/activities/livestock" },
+            { title: "Industry", link: "/en/activities/industry-processing" },
+            { title: "Import-Export", link: "/en/activities/import-export_en" },
+            { title: "Travel & Administrative Support", link: "/en/activities/travel-support" },
+            { title: "General Services", link: "/en/activities/various-services" },
           ].map((item, index) => (
             <a
               key={index}
