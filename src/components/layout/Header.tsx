@@ -61,10 +61,10 @@ export default function Header() {
 	  {/* BOUTON HAMBURGER MOBILE */}
 	  <button
 	    onClick={() => setOpen(true)}
-	    className="md:hidden text-blue-900 focus:outline-none absolute right-4"
+	    className="md:hidden text-blue-900 focus:outline-none absolute right-4 top-1/2 -translate-y-1/2"
 	  >
-	    <svg width="32" height="32" fill="currentColor">
-	      <path d="M4 8h24M4 16h24M4 24h24" />
+	    <svg width="28" height="28" stroke="currentColor" strokeWidth="2" fill="none">
+	      <path d="M4 8h20M4 16h20M4 24h20" />
 	    </svg>
 	  </button>
 	</div>
