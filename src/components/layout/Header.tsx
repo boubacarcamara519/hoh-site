@@ -35,7 +35,7 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
 
         {/* LOGO + NOM COMPLET — INTACT */}
-        <Link href={isEnglish ? "/en/home" : "/fr/home"} className="flex items-center gap-3">
+        <Link href={isEnglish ? "/en/home" : "/fr/home"} className="flex items-center gap-3 max-w-[70%]">
           <Image
             src="/hoh-logo.jpg"
             alt="Hope Of Horizons Group"
