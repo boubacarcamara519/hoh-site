@@ -35,23 +35,26 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
 
         {/* LOGO + NOM COMPLET — INTACT */}
-        <Link href={isEnglish ? "/en/home" : "/fr/home"} className="flex items-center gap-3 max-w-[40%]">
-          <Image
-            src="/hoh-logo.jpg"
-            alt="Hope Of Horizons Group"
-            width={120}
-            height={60}
-            priority
-          />
-          <div className="flex flex-col">
-            <span className="text-lg font-bold text-gray-800">
-              Hope Of Horizons Group
-            </span>
-            <span className="text-xs text-gray-500">
-              L’action locale, l’impact global
-            </span>
-          </div>
-        </Link>
+        <Link
+	  href={isEnglish ? "/en/home" : "/fr/home"}
+	  className="flex items-center gap-3 max-w-[70%] md:max-w-none"
+	>
+	  <Image
+	    src="/hoh-logo.jpg"
+	    alt="Hope Of Horizons Group"
+	    width={80}
+	    height={40}
+	    priority
+	  />
+	  <div className="flex flex-col">
+	    <span className="text-lg font-bold text-gray-800">
+	      Hope Of Horizons Group
+	    </span>
+	    <span className="text-xs text-gray-500 hidden sm:block">
+	      L’action locale, l’impact global
+	    </span>
+	  </div>
+	</Link>
 
         {/* MENU DESKTOP — INTACT */}
         <nav className="hidden md:flex items-center gap-6">
