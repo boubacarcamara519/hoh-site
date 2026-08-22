@@ -1,4 +1,24 @@
 export default function PartnershipPage() {
+  const partners: string[] = [
+    "CFP de Kindia.jpeg",
+    "ENPETP.png",
+    "Unversité Roi Mohamed VI de Conakry.jpeg",
+    "Kalinga Institute of Industrial Technology (KIIT University).jpeg",
+    "Université Julius Nyéréré de kankan (UJNK ).jpeg",
+    "Université Ahmadou Dieng.jpeg",
+    "Toroko Services.jpeg",
+  ];
+
+  // Fonction pour retirer l’extension et afficher un nom propre
+  const cleanName = (file: string): string =>
+    file
+      .replace(/\.(jpeg|jpg|png)$/i, "")
+      .replace(
+        /WhatsApp Image \d{4}-\d{2}-\d{2} at \d{2}\.\d{2}\.\d{2}/i,
+        "Partenaire"
+      )
+      .replace(/_/g, " ");
+
   return (
     <main className="w-full">
 
@@ -63,6 +83,36 @@ export default function PartnershipPage() {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ⭐️ SECTION : NOS PARTENAIRES */}
+      <section className="container mx-auto px-6 py-20 max-w-6xl">
+        <h2 className="text-3xl font-bold text-blue-800 text-center mb-10">
+          Nos partenaires
+        </h2>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10 place-items-center">
+
+          {partners.map((img, index) => (
+            <div key={index} className="text-center">
+              <div
+                className="w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden shadow-lg bg-white flex items-center justify-center hover:scale-105 transition"
+              >
+                <img
+                  src={`/partenaires/${img}`}
+                  alt={cleanName(img)}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Nom du partenaire */}
+              <p className="mt-3 text-sm font-medium text-slate-700">
+                {cleanName(img)}
+              </p>
+            </div>
+          ))}
+
         </div>
       </section>
 

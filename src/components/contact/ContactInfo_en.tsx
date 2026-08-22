@@ -14,7 +14,7 @@ export default function ContactInfo() {
           <span className="font-semibold">WhatsApp:</span> +224 613 61 50 86
         </p>
         <p>
-          <span className="font-semibold">Email:</span> hopeofhorizonsgroup2025@gmai.com
+          <span className="font-semibold">Email:</span> hopeofhorizonsgroup2025@gmail.com
         </p>
       </div>
     </section>
