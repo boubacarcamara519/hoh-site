@@ -10,7 +10,7 @@ export default function ActivitiesPage() {
           Nos secteurs d’activité
         </h1>
         <p className="text-lg opacity-90 max-w-2xl mx-auto">
-          HOH Group intervient dans 6 pôles stratégiques pour soutenir le développement humain,
+          HOH Group intervient dans 8 pôles stratégiques pour soutenir le développement humain,
           économique et technologique en Guinée.
         </p>
       </section>

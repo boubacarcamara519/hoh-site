@@ -10,7 +10,7 @@ export default function ActivitiesPage() {
           Our Business Sectors
         </h1>
         <p className="text-lg opacity-90 max-w-2xl mx-auto">
-          HOH Group operates across six strategic sectors to support human,
+          HOH Group operates across 8 strategic sectors to support human,
           economic, and technological development in Guinea.
         </p>
       </section>
