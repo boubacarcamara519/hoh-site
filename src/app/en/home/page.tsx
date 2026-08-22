@@ -68,7 +68,7 @@ export default function HomePage() {
             <p className="text-slate-600">Agricultural land & plantations</p>
           </div>
           <div>
-            <p className="text-4xl font-extrabold text-blue-700">6</p>
+            <p className="text-4xl font-extrabold text-blue-700">8</p>
             <p className="text-slate-600">Business sectors</p>
           </div>
           <div>
