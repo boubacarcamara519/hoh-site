@@ -1,3 +1,5 @@
+import { MAP_EMBED_URL } from "@/lib/site";
+
 export default function ContactMap() {
   return (
     <section className="bg-white border rounded-lg p-4 shadow-sm">
@@ -6,7 +8,7 @@ export default function ContactMap() {
       <div className="aspect-video w-full rounded overflow-hidden">
         <iframe
           title="HOH Location"
-          src="https://www.google.com/maps/embed?pb="
+          src={MAP_EMBED_URL}
           width="100%"
           height="100%"
           loading="lazy"
@@ -16,4 +18,3 @@ export default function ContactMap() {
     </section>
   );
 }
-

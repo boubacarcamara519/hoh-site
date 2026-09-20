@@ -33,13 +33,17 @@ export const studentSchema = z.object({
 });
 
 export const contactSchema = z.object({
-  name: z.string().min(2),
+  name: z.string().trim().min(2).max(120),
   email: z.string().email(),
-  subject: z.string().optional(),
-  message: z.string().min(5)
+  subject: z.string().trim().max(200).optional(),
+  message: z.string().trim().min(5).max(5000)
+});
+
+export const newsletterSchema = z.object({
+  email: z.string().email()
 });
 
 export type ProfessionalPayload = z.infer<typeof professionalSchema>;
 export type StudentPayload = z.infer<typeof studentSchema>;
 export type ContactPayload = z.infer<typeof contactSchema>;
-
+export type NewsletterPayload = z.infer<typeof newsletterSchema>;

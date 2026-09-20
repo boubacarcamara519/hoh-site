@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { WHATSAPP_URL } from "@/lib/site";
+
 export default function QuickContact() {
   return (
     <section className="py-12 bg-hohDark text-white">
@@ -10,37 +13,23 @@ export default function QuickContact() {
           </p>
 
           <a
-            href="https://wa.me/XXXXXXXXXXX"
+            href={WHATSAPP_URL}
             className="inline-block bg-hohGreen px-5 py-3 rounded-md font-semibold"
           >
             WhatsApp
           </a>
         </div>
 
-        <form className="bg-white text-slate-900 rounded-lg p-4 space-y-3">
-          <input
-            className="w-full border rounded px-3 py-2"
-            placeholder="Nom"
-          />
-
-          <input
-            className="w-full border rounded px-3 py-2"
-            placeholder="Email"
-            type="email"
-          />
-
-          <textarea
-            className="w-full border rounded px-3 py-2"
-            rows={3}
-            placeholder="Message"
-          />
-
-          <button className="bg-hohBlue text-white px-4 py-2 rounded">
-            Envoyer
-          </button>
-        </form>
+        <div className="bg-white text-slate-900 rounded-lg p-4 space-y-3">
+          <p className="font-semibold">Envoyez-nous votre demande</p>
+          <Link
+            href="/fr/contact"
+            className="inline-block bg-hohBlue text-white px-4 py-2 rounded font-semibold shadow hover:bg-blue-800 transition-colors"
+          >
+            Ouvrir le formulaire de contact
+          </Link>
+        </div>
       </div>
     </section>
   );
 }
-

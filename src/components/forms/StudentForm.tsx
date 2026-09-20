@@ -10,16 +10,21 @@ export default function StudentForm() {
     e.preventDefault();
     setStatus("loading");
 
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
     const payload = Object.fromEntries(formData.entries());
 
-    const res = await fetch("/api/forms/students", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-
-    setStatus(res.ok ? "success" : "error");
+    try {
+      const res = await fetch("/api/forms/students", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      setStatus(res.ok ? "success" : "error");
+      if (res.ok) form.reset();
+    } catch {
+      setStatus("error");
+    }
   }
 
   return (
@@ -172,9 +177,9 @@ export default function StudentForm() {
       <button
         type="submit"
         disabled={status === "loading"}
-        className="bg-hohBlue text-white px-5 py-2 rounded font-semibold"
+        className="bg-hohBlue text-white px-5 py-2 rounded font-semibold shadow hover:bg-blue-800 transition-colors"
       >
-        {status === "loading" ? "Envoi..." : "Envoyer la demande"}
+        {status === "loading" ? "Enregistrement..." : "Enregistrer la demande"}
       </button>
 
       {status === "success" && (
@@ -190,4 +195,3 @@ export default function StudentForm() {
     </form>
   );
 }
-

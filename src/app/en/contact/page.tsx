@@ -2,6 +2,7 @@ import ContactInfo from "@/components/contact/ContactInfo_en";
 import ContactMap from "@/components/contact/ContactMap_en";
 import ContactForm from "@/components/contact/ContactForm_en";
 import NewsletterForm from "@/components/newsletter/NewsletterForm_en";
+import { WHATSAPP_URL } from "@/lib/site";
 
 export default function ContactPage() {
   return (
@@ -70,7 +71,7 @@ export default function ContactPage() {
         </p>
 
         <a
-          href="https://wa.me/224XXXXXXXX"
+          href={WHATSAPP_URL}
           className="bg-white text-blue-900 font-semibold px-8 py-3 rounded-lg shadow hover:bg-slate-200 transition"
         >
           Write to us on WhatsApp
@@ -80,4 +81,3 @@ export default function ContactPage() {
     </main>
   );
 }
-

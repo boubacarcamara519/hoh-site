@@ -7,6 +7,8 @@ export default function PartnershipPage() {
     "Université Julius Nyéréré de kankan (UJNK ).jpeg",
     "Université Ahmadou Dieng.jpeg",
     "Toroko Services.jpeg",
+	"ministere_elevage.jpeg",
+	"ministere_agriculture.jpeg",
   ];
 
   // Fonction pour retirer l’extension et afficher un nom propre

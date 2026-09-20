@@ -1,3 +1,5 @@
+import { WHATSAPP_URL } from "@/lib/site";
+
 export default function Hero() {
   return (
     <section className="bg-gradient-to-br from-hohDark via-hohBlue to-hohGreen text-white py-20">
@@ -21,7 +23,7 @@ export default function Hero() {
           </a>
 
           <a
-            href="https://wa.me/XXXXXXXXXXX"
+            href={WHATSAPP_URL}
             className="border border-white px-6 py-3 rounded-md font-semibold"
           >
             WhatsApp
@@ -31,4 +33,3 @@ export default function Hero() {
     </section>
   );
 }
-

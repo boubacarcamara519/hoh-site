@@ -61,7 +61,7 @@ export default function AboutPage() {
 
         <div className="flex justify-center gap-4 flex-wrap">
           <a
-            href="/fr/activites"
+            href="/fr/activities"
             className="bg-white text-blue-900 font-semibold px-6 py-3 rounded-lg shadow hover:bg-slate-200 transition"
           >
             Nos activités
@@ -78,5 +78,4 @@ export default function AboutPage() {
     </main>
   );
 }
-
 

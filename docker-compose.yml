@@ -1,9 +1,36 @@
 services:
+  hoh-db:
+    image: postgres:16-alpine
+    container_name: hoh-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-hoh}
+      POSTGRES_USER: ${POSTGRES_USER:-hoh}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-this-password}
+    volumes:
+      - hoh-db-data:/var/lib/postgresql/data
+      - ./db/001_initial.sql:/docker-entrypoint-initdb.d/001_initial.sql:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-hoh} -d ${POSTGRES_DB:-hoh}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   hoh-web:
     build: .
     container_name: hoh-web
     restart: unless-stopped
     env_file:
       - .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-hoh}:${POSTGRES_PASSWORD:-change-this-password}@hoh-db:5432/${POSTGRES_DB:-hoh}
     ports:
       - "3000:3000"
+    depends_on:
+      hoh-db:
+        condition: service_healthy
+
+volumes:
+  hoh-db-data:

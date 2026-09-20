@@ -7,6 +7,8 @@ export default function PartnershipPage() {
     "Université Julius Nyéréré de kankan (UJNK ).jpeg",
     "Université Ahmadou Dieng.jpeg",
     "Toroko Services.jpeg",
+    "ministere_elevage.jpeg",
+    "ministere_agriculture.jpeg",
   ];
 
   // Function to remove extension and display a clean name
@@ -163,7 +165,7 @@ export default function PartnershipPage() {
         </p>
 
         <a
-          href="/fr/forms"
+          href="/en/forms"
           className="bg-white text-blue-900 font-semibold px-8 py-3 rounded-lg shadow hover:bg-slate-200 transition"
         >
           Fill out the partner form
@@ -173,4 +175,3 @@ export default function PartnershipPage() {
     </main>
   );
 }
-

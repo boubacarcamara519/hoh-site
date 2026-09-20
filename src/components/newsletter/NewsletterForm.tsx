@@ -1,13 +1,30 @@
 "use client";
 
+import { useState } from "react";
+
 export default function NewsletterForm() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const email = (e.target as HTMLFormElement).email.value;
-    alert(`Merci pour votre inscription, ${email} !`);
+    setStatus("loading");
+    const form = e.currentTarget;
+    const email = new FormData(form).get("email");
+    try {
+      const response = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+      });
+      setStatus(response.ok ? "success" : "error");
+      if (response.ok) form.reset();
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (
+    <>
     <form
       onSubmit={handleSubmit}
       className="flex flex-col sm:flex-row gap-4 justify-center"
@@ -21,11 +38,18 @@ export default function NewsletterForm() {
       />
       <button
         type="submit"
-        className="bg-blue-700 text-white font-semibold px-6 py-3 rounded-md hover:bg-blue-800 transition"
+        disabled={status === "loading"}
+        className="bg-hohBlue text-white font-semibold px-6 py-3 rounded-md shadow hover:bg-blue-800 transition-colors"
       >
-        S’abonner
+        {status === "loading" ? "Enregistrement..." : "S’abonner"}
       </button>
     </form>
+    {status === "success" && (
+      <p className="text-sm text-green-600 mt-2">Inscription enregistrée.</p>
+    )}
+    {status === "error" && (
+      <p className="text-sm text-red-600 mt-2">Impossible d’enregistrer cette adresse.</p>
+    )}
+    </>
   );
 }
-
