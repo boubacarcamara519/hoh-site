@@ -8,8 +8,8 @@ export const professionalSchema = z.object({
   birthDate: z.string().optional(),
   occupation: z.string().optional(),
   organization: z.string().optional(),
-  whatsapp: z.string().min(3),
-  email: z.string().email(),
+  whatsapp: z.string().min(3).regex(/^\d+$/),
+  email: z.string().trim().toLowerCase().email(),
   reason: z.string().min(5),
   message: z.string().optional()
 });
@@ -24,8 +24,8 @@ export const studentSchema = z.object({
   birthDate: z.string().optional(),
   currentOccupation: z.string().optional(),
   institution: z.string().optional(),
-  whatsapp: z.string().min(3),
-  email: z.string().email(),
+  whatsapp: z.string().min(3).regex(/^\d+$/),
+  email: z.string().trim().toLowerCase().email(),
   passportNumber: z.string().optional(),
   passportIssueDate: z.string().optional(),
   passportExpiryDate: z.string().optional(),
@@ -34,13 +34,13 @@ export const studentSchema = z.object({
 
 export const contactSchema = z.object({
   name: z.string().trim().min(2).max(120),
-  email: z.string().email(),
+  email: z.string().trim().toLowerCase().email(),
   subject: z.string().trim().max(200).optional(),
   message: z.string().trim().min(5).max(5000)
 });
 
 export const newsletterSchema = z.object({
-  email: z.string().email()
+  email: z.string().trim().toLowerCase().email()
 });
 
 export type ProfessionalPayload = z.infer<typeof professionalSchema>;

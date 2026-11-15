@@ -6,7 +6,13 @@ import { saveNewsletterSubscriber } from "@/lib/db";
 export async function POST(req: Request) {
   try {
     const parsed = newsletterSchema.parse(await req.json());
-    await saveNewsletterSubscriber(parsed);
+    const saved = await saveNewsletterSubscriber(parsed);
+    if (!saved) {
+      return NextResponse.json(
+        { ok: false, code: "EMAIL_ALREADY_EXISTS" },
+        { status: 409 }
+      );
+    }
     return NextResponse.json({ ok: true });
   } catch (error) {
     if (error instanceof SyntaxError || error instanceof ZodError) {

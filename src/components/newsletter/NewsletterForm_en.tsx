@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 export default function NewsletterForm() {
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error" | "duplicate">("idle");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -16,8 +16,16 @@ export default function NewsletterForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email })
       });
-      setStatus(response.ok ? "success" : "error");
-      if (response.ok) form.reset();
+      if (response.status === 409) {
+        setStatus("duplicate");
+        return;
+      }
+      if (!response.ok) {
+        setStatus("error");
+        return;
+      }
+      setStatus("success");
+      form.reset();
     } catch {
       setStatus("error");
     }
@@ -29,7 +37,11 @@ export default function NewsletterForm() {
       onSubmit={handleSubmit}
       className="flex flex-col sm:flex-row gap-4 justify-center"
     >
+      <label htmlFor="newsletter-email-en" className="self-start sm:self-center whitespace-nowrap text-sm font-medium">
+        Email <span className="text-red-600" aria-hidden="true">*</span>
+      </label>
       <input
+        id="newsletter-email-en"
         type="email"
         name="email"
         placeholder="Your email address"
@@ -47,6 +59,9 @@ export default function NewsletterForm() {
     </form>
     {status === "success" && (
       <p className="text-sm text-green-600 mt-2">Subscription saved.</p>
+    )}
+    {status === "duplicate" && (
+      <p className="text-sm text-red-600 mt-2">This email address already exists.</p>
     )}
     {status === "error" && (
       <p className="text-sm text-red-600 mt-2">Unable to save this address.</p>

@@ -34,7 +34,9 @@ export default function ContactForm() {
       <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium">Nom</label>
+            <label className="block text-sm font-medium">
+              Nom <span className="text-red-600" aria-hidden="true">*</span>
+            </label>
             <input
               name="name"
               required
@@ -43,7 +45,9 @@ export default function ContactForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium">Email</label>
+            <label className="block text-sm font-medium">
+              Email <span className="text-red-600" aria-hidden="true">*</span>
+            </label>
             <input
               type="email"
               name="email"
@@ -62,7 +66,9 @@ export default function ContactForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium">Message</label>
+          <label className="block text-sm font-medium">
+            Message <span className="text-red-600" aria-hidden="true">*</span>
+          </label>
           <textarea
             name="message"
             rows={4}

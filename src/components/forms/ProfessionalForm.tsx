@@ -4,7 +4,7 @@ import { useState } from "react";
 
 export default function ProfessionalForm() {
   const [status, setStatus] =
-    useState<"idle" | "loading" | "success" | "error">("idle");
+    useState<"idle" | "loading" | "success" | "error" | "duplicate">("idle");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -20,8 +20,16 @@ export default function ProfessionalForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
-      setStatus(res.ok ? "success" : "error");
-      if (res.ok) form.reset();
+      if (res.status === 409) {
+        setStatus("duplicate");
+        return;
+      }
+      if (!res.ok) {
+        setStatus("error");
+        return;
+      }
+      setStatus("success");
+      form.reset();
     } catch {
       setStatus("error");
     }
@@ -38,7 +46,9 @@ export default function ProfessionalForm() {
 
       <div className="grid md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium">Nom et prénom</label>
+          <label className="block text-sm font-medium">
+            Nom et prénom <span className="text-red-600" aria-hidden="true">*</span>
+          </label>
           <input
             name="fullName"
             required
@@ -88,16 +98,26 @@ export default function ProfessionalForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium">Numéro WhatsApp</label>
+          <label className="block text-sm font-medium">
+            Numéro WhatsApp <span className="text-red-600" aria-hidden="true">*</span>
+          </label>
           <input
+            type="tel"
             name="whatsapp"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            onChange={(event) => {
+              event.currentTarget.value = event.currentTarget.value.replace(/\D/g, "");
+            }}
             required
             className="mt-1 w-full border rounded px-3 py-2"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium">Email</label>
+          <label className="block text-sm font-medium">
+            Email <span className="text-red-600" aria-hidden="true">*</span>
+          </label>
           <input
             type="email"
             name="email"
@@ -108,7 +128,9 @@ export default function ProfessionalForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium">Motif de la demande</label>
+        <label className="block text-sm font-medium">
+          Motif de la demande <span className="text-red-600" aria-hidden="true">*</span>
+        </label>
         <textarea
           name="reason"
           required
@@ -139,6 +161,11 @@ export default function ProfessionalForm() {
       {status === "success" && (
         <p className="text-sm text-green-600 mt-2">
           Merci, votre demande a bien été envoyée.
+        </p>
+      )}
+      {status === "duplicate" && (
+        <p className="text-sm text-red-600 mt-2">
+          Cette adresse e-mail existe déjà.
         </p>
       )}
       {status === "error" && (

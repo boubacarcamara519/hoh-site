@@ -8,7 +8,13 @@ export async function POST(req: Request) {
     const json = await req.json();
     const parsed = studentSchema.parse(json);
 
-    await saveStudentForm(parsed);
+    const saved = await saveStudentForm(parsed);
+    if (!saved) {
+      return NextResponse.json(
+        { ok: false, code: "EMAIL_ALREADY_EXISTS" },
+        { status: 409 }
+      );
+    }
 
     return NextResponse.json({ ok: true });
   } catch (error) {

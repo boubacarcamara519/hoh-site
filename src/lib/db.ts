@@ -111,9 +111,47 @@ async function withDatabase<T>(callback: (client: PoolClient) => Promise<T>) {
   }
 }
 
+type EmailSubmissionTable =
+  | "professional_submissions"
+  | "student_submissions"
+  | "newsletter_subscribers";
+
+async function saveIfEmailIsNew(
+  table: EmailSubmissionTable,
+  email: string,
+  save: (client: PoolClient) => Promise<void>
+) {
+  return withDatabase(async (client) => {
+    await client.query("BEGIN");
+
+    try {
+      await client.query(
+        "SELECT pg_advisory_xact_lock(hashtext($1), 0)",
+        [`${table}:${email.toLowerCase()}`]
+      );
+      const existing = await client.query(
+        `SELECT 1 FROM ${table} WHERE LOWER(email) = LOWER($1) LIMIT 1`,
+        [email]
+      );
+
+      if (existing.rowCount) {
+        await client.query("ROLLBACK");
+        return false;
+      }
+
+      await save(client);
+      await client.query("COMMIT");
+      return true;
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    }
+  });
+}
+
 export async function saveProfessionalForm(data: ProfessionalPayload) {
-  await withDatabase((client) =>
-    client.query(
+  return saveIfEmailIsNew("professional_submissions", data.email, async (client) => {
+    await client.query(
       `INSERT INTO professional_submissions
         (full_name, email, whatsapp, reason, payload)
        VALUES ($1, $2, $3, $4, $5::jsonb)`,
@@ -124,13 +162,13 @@ export async function saveProfessionalForm(data: ProfessionalPayload) {
         data.reason,
         JSON.stringify(data)
       ]
-    )
-  );
+    );
+  });
 }
 
 export async function saveStudentForm(data: StudentPayload) {
-  await withDatabase((client) =>
-    client.query(
+  return saveIfEmailIsNew("student_submissions", data.email, async (client) => {
+    await client.query(
       `INSERT INTO student_submissions
         (full_name, email, whatsapp, payload)
        VALUES ($1, $2, $3, $4::jsonb)`,
@@ -140,8 +178,8 @@ export async function saveStudentForm(data: StudentPayload) {
         data.whatsapp,
         JSON.stringify(data)
       ]
-    )
-  );
+    );
+  });
 }
 
 export async function saveContactMessage(data: ContactPayload) {
@@ -162,12 +200,11 @@ export async function saveContactMessage(data: ContactPayload) {
 }
 
 export async function saveNewsletterSubscriber(data: NewsletterPayload) {
-  await withDatabase((client) =>
-    client.query(
+  return saveIfEmailIsNew("newsletter_subscribers", data.email, async (client) => {
+    await client.query(
       `INSERT INTO newsletter_subscribers (email)
-       VALUES ($1)
-       ON CONFLICT (email) DO NOTHING`,
+       VALUES ($1)`,
       [data.email]
-    )
-  );
+    );
+  });
 }
