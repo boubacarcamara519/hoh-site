@@ -48,7 +48,7 @@ export default function Header() {
 	      height={40}
 	      priority
 	    />
-	    <div className="flex flex-col">
+	    <div className="flex flex-col items-center text-center">
 	      <span className="text-lg font-bold text-gray-800">
 		Hope Of Horizons Group
 	      </span>

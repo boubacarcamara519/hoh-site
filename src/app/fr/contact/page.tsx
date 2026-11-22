@@ -1,4 +1,5 @@
 import ContactInfo from "@/components/contact/ContactInfo";
+import SocialLinks from "@/components/contact/SocialLinks";
 import ContactMap from "@/components/contact/ContactMap";
 import ContactForm from "@/components/contact/ContactForm";
 import NewsletterForm from "@/components/newsletter/NewsletterForm";
@@ -29,6 +30,10 @@ export default function ContactPage() {
       {/* CONTACT INFO */}
       <section className="container mx-auto px-6 max-w-5xl py-12">
         <ContactInfo />
+      </section>
+
+      <section className="container mx-auto px-6 max-w-5xl pb-12">
+        <SocialLinks locale="fr" />
       </section>
 
       {/* MAP */}

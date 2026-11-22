@@ -8,7 +8,7 @@ export const professionalSchema = z.object({
   birthDate: z.string().optional(),
   occupation: z.string().optional(),
   organization: z.string().optional(),
-  whatsapp: z.string().min(3).regex(/^\d+$/),
+  whatsapp: z.string().regex(/^\+?\d{3,}$/),
   email: z.string().trim().toLowerCase().email(),
   reason: z.string().min(5),
   message: z.string().optional()
@@ -24,12 +24,11 @@ export const studentSchema = z.object({
   birthDate: z.string().optional(),
   currentOccupation: z.string().optional(),
   institution: z.string().optional(),
-  whatsapp: z.string().min(3).regex(/^\d+$/),
+  whatsapp: z.string().regex(/^\+?\d{3,}$/),
   email: z.string().trim().toLowerCase().email(),
   passportNumber: z.string().optional(),
   passportIssueDate: z.string().optional(),
-  passportExpiryDate: z.string().optional(),
-  documents: z.string().optional()
+  passportExpiryDate: z.string().optional()
 });
 
 export const contactSchema = z.object({

@@ -23,6 +23,20 @@ CREATE TABLE IF NOT EXISTS student_submissions (
 CREATE INDEX IF NOT EXISTS student_submissions_created_at_idx
   ON student_submissions (created_at DESC);
 
+CREATE TABLE IF NOT EXISTS student_documents (
+  id BIGSERIAL PRIMARY KEY,
+  student_submission_id BIGINT NOT NULL
+    REFERENCES student_submissions (id) ON DELETE CASCADE,
+  file_name TEXT NOT NULL,
+  mime_type TEXT NOT NULL,
+  size_bytes INTEGER NOT NULL CHECK (size_bytes > 0),
+  file_data BYTEA NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS student_documents_submission_idx
+  ON student_documents (student_submission_id);
+
 CREATE TABLE IF NOT EXISTS contact_messages (
   id BIGSERIAL PRIMARY KEY,
   name TEXT NOT NULL,
@@ -39,7 +53,8 @@ CREATE INDEX IF NOT EXISTS contact_messages_created_at_idx
 CREATE TABLE IF NOT EXISTS newsletter_subscribers (
   id BIGSERIAL PRIMARY KEY,
   email TEXT NOT NULL UNIQUE,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  unsubscribed_at TIMESTAMPTZ
 );
 
 CREATE INDEX IF NOT EXISTS newsletter_subscribers_created_at_idx

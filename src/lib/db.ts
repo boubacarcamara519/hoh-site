@@ -73,6 +73,20 @@ async function initializeSchema() {
       CREATE INDEX IF NOT EXISTS student_submissions_created_at_idx
         ON student_submissions (created_at DESC);
 
+      CREATE TABLE IF NOT EXISTS student_documents (
+        id BIGSERIAL PRIMARY KEY,
+        student_submission_id BIGINT NOT NULL
+          REFERENCES student_submissions (id) ON DELETE CASCADE,
+        file_name TEXT NOT NULL,
+        mime_type TEXT NOT NULL,
+        size_bytes INTEGER NOT NULL CHECK (size_bytes > 0),
+        file_data BYTEA NOT NULL,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+
+      CREATE INDEX IF NOT EXISTS student_documents_submission_idx
+        ON student_documents (student_submission_id);
+
       CREATE TABLE IF NOT EXISTS contact_messages (
         id BIGSERIAL PRIMARY KEY,
         name TEXT NOT NULL,
@@ -91,6 +105,9 @@ async function initializeSchema() {
         email TEXT NOT NULL UNIQUE,
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       );
+
+      ALTER TABLE newsletter_subscribers
+        ADD COLUMN IF NOT EXISTS unsubscribed_at TIMESTAMPTZ;
 
       CREATE INDEX IF NOT EXISTS newsletter_subscribers_created_at_idx
         ON newsletter_subscribers (created_at DESC);
@@ -166,12 +183,23 @@ export async function saveProfessionalForm(data: ProfessionalPayload) {
   });
 }
 
-export async function saveStudentForm(data: StudentPayload) {
+export type StudentDocumentUpload = {
+  fileName: string;
+  mimeType: string;
+  sizeBytes: number;
+  fileData: Buffer;
+};
+
+export async function saveStudentForm(
+  data: StudentPayload,
+  documents: StudentDocumentUpload[] = []
+) {
   return saveIfEmailIsNew("student_submissions", data.email, async (client) => {
-    await client.query(
+    const result = await client.query<{ id: string }>(
       `INSERT INTO student_submissions
         (full_name, email, whatsapp, payload)
-       VALUES ($1, $2, $3, $4::jsonb)`,
+       VALUES ($1, $2, $3, $4::jsonb)
+       RETURNING id`,
       [
         data.fullName,
         data.email,
@@ -179,6 +207,21 @@ export async function saveStudentForm(data: StudentPayload) {
         JSON.stringify(data)
       ]
     );
+
+    for (const document of documents) {
+      await client.query(
+        `INSERT INTO student_documents
+          (student_submission_id, file_name, mime_type, size_bytes, file_data)
+         VALUES ($1, $2, $3, $4, $5)`,
+        [
+          result.rows[0].id,
+          document.fileName,
+          document.mimeType,
+          document.sizeBytes,
+          document.fileData
+        ]
+      );
+    }
   });
 }
 
@@ -200,11 +243,79 @@ export async function saveContactMessage(data: ContactPayload) {
 }
 
 export async function saveNewsletterSubscriber(data: NewsletterPayload) {
-  return saveIfEmailIsNew("newsletter_subscribers", data.email, async (client) => {
-    await client.query(
-      `INSERT INTO newsletter_subscribers (email)
-       VALUES ($1)`,
-      [data.email]
+  return withDatabase(async (client) => {
+    await client.query("BEGIN");
+
+    try {
+      await client.query(
+        "SELECT pg_advisory_xact_lock(hashtext($1), 0)",
+        [`newsletter_subscribers:${data.email.toLowerCase()}`]
+      );
+      const existing = await client.query<{ unsubscribed_at: Date | null }>(
+        `SELECT unsubscribed_at
+         FROM newsletter_subscribers
+         WHERE LOWER(email) = LOWER($1)
+         LIMIT 1
+         FOR UPDATE`,
+        [data.email]
+      );
+
+      if (existing.rowCount) {
+        if (existing.rows[0].unsubscribed_at) {
+          await client.query(
+            `UPDATE newsletter_subscribers
+             SET unsubscribed_at = NULL
+             WHERE LOWER(email) = LOWER($1)`,
+            [data.email]
+          );
+          await client.query("COMMIT");
+          return true;
+        }
+
+        await client.query("ROLLBACK");
+        return false;
+      }
+
+      await client.query(
+        `INSERT INTO newsletter_subscribers (email)
+         VALUES ($1)`,
+        [data.email]
+      );
+      await client.query("COMMIT");
+      return true;
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    }
+  });
+}
+
+export type NewsletterSubscriber = {
+  id: string;
+  email: string;
+  created_at: Date;
+};
+
+export async function getActiveNewsletterSubscribers() {
+  return withDatabase(async (client) => {
+    const result = await client.query<NewsletterSubscriber>(
+      `SELECT id, email, created_at
+       FROM newsletter_subscribers
+       WHERE unsubscribed_at IS NULL
+       ORDER BY created_at DESC`
     );
+    return result.rows;
+  });
+}
+
+export async function unsubscribeNewsletterSubscriber(id: string) {
+  return withDatabase(async (client) => {
+    const result = await client.query(
+      `UPDATE newsletter_subscribers
+       SET unsubscribed_at = COALESCE(unsubscribed_at, NOW())
+       WHERE id = $1`,
+      [id]
+    );
+    return result.rowCount === 1;
   });
 }

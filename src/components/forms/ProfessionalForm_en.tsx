@@ -104,10 +104,15 @@ export default function ProfessionalForm() {
           <input
             type="tel"
             name="whatsapp"
-            inputMode="numeric"
-            pattern="[0-9]*"
+            inputMode="tel"
+            pattern="\+?[0-9]{3,}"
+            placeholder="+224 613 615 086"
             onChange={(event) => {
-              event.currentTarget.value = event.currentTarget.value.replace(/\D/g, "");
+              const value = event.currentTarget.value;
+              const digits = value.replace(/\D/g, "");
+              event.currentTarget.value = value.trim().startsWith("+")
+                ? `+${digits}`
+                : digits;
             }}
             required
             className="mt-1 w-full border rounded px-3 py-2"

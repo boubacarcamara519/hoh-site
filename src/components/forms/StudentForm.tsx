@@ -1,36 +1,85 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+
+const maxDocumentCount = 1;
+const maxTotalDocumentSize = 4 * 1024 * 1024;
+const allowedDocumentExtension = /\.(pdf|jpe?g|png)$/i;
 
 export default function StudentForm() {
   const [status, setStatus] =
     useState<"idle" | "loading" | "success" | "error" | "duplicate">("idle");
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [fileError, setFileError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  function updateSelectedFiles(files: File[]) {
+    setSelectedFiles(files);
+    setFileError("");
+    setErrorMessage("");
+
+    if (files.length > maxDocumentCount) {
+      setFileError("Vous pouvez joindre un seul fichier.");
+    } else if (
+      files.reduce((total, file) => total + file.size, 0) >
+      maxTotalDocumentSize
+    ) {
+      setFileError("La taille totale des fichiers ne doit pas dépasser 4 Mo.");
+    } else if (files.some((file) => !allowedDocumentExtension.test(file.name))) {
+      setFileError("Seuls les fichiers PDF, JPG, JPEG et PNG sont acceptés.");
+    }
+  }
+
+  function removeSelectedFile(indexToRemove: number) {
+    const remainingFiles = selectedFiles.filter(
+      (_, index) => index !== indexToRemove
+    );
+    const transfer = new DataTransfer();
+    remainingFiles.forEach((file) => transfer.items.add(file));
+    if (fileInputRef.current) {
+      fileInputRef.current.files = transfer.files;
+    }
+    updateSelectedFiles(remainingFiles);
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (fileError) return;
     setStatus("loading");
 
     const form = e.currentTarget;
     const formData = new FormData(form);
-    const payload = Object.fromEntries(formData.entries());
 
     try {
       const res = await fetch("/api/forms/students", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: formData
       });
       if (res.status === 409) {
         setStatus("duplicate");
         return;
       }
       if (!res.ok) {
+        const result = await res.json().catch(() => ({}));
+        const messages: Record<string, string> = {
+          TOO_MANY_FILES: "Vous pouvez joindre un seul fichier.",
+          FILES_TOO_LARGE: "La taille totale des fichiers ne doit pas dépasser 4 Mo.",
+          UNSUPPORTED_FILE_TYPE: "Seuls les fichiers PDF, JPG, JPEG et PNG sont acceptés.",
+          INVALID_FILE_NAME: "Un nom de fichier est invalide."
+        };
+        setErrorMessage(
+          messages[result.code] ?? "Une erreur est survenue. Merci de réessayer."
+        );
         setStatus("error");
         return;
       }
       setStatus("success");
+      setSelectedFiles([]);
+      setFileError("");
       form.reset();
     } catch {
+      setErrorMessage("Impossible d’envoyer la demande. Merci de réessayer.");
       setStatus("error");
     }
   }
@@ -123,10 +172,15 @@ export default function StudentForm() {
             <input
               type="tel"
               name="whatsapp"
-              inputMode="numeric"
-              pattern="[0-9]*"
+              inputMode="tel"
+              pattern="\+?[0-9]{3,}"
+              placeholder="+224 613 615 086"
               onChange={(event) => {
-                event.currentTarget.value = event.currentTarget.value.replace(/\D/g, "");
+                const value = event.currentTarget.value;
+                const digits = value.replace(/\D/g, "");
+                event.currentTarget.value = value.trim().startsWith("+")
+                  ? `+${digits}`
+                  : digits;
               }}
               required
               className="mt-1 w-full border rounded px-3 py-2"
@@ -179,24 +233,62 @@ export default function StudentForm() {
         </div>
       </div>
 
-      {/* Pièces (structure simple pour l’instant) */}
+      {/* Pièces à fournir */}
       <div>
-        <h3 className="font-semibold mb-2">Pièces à fournir (structure)</h3>
-        <p className="text-sm text-slate-700 mb-2">
-          Vous pourrez téléverser vos pièces dans une version ultérieure. Pour
-          l’instant, indiquez les documents disponibles.
+        <h3 className="font-semibold mb-2">Pièces à fournir</h3>
+        <p className="text-sm text-slate-700 mb-3">
+          Sélectionnez un fichier (passeport, diplôme ou carte scolaire) en PDF
+          ou image (JPG, PNG), pour un total maximal de 4 Mo.
         </p>
-        <textarea
+        <label htmlFor="student-documents" className="sr-only">
+          Sélectionner des pièces à fournir
+        </label>
+        <input
+          ref={fileInputRef}
+          id="student-documents"
+          type="file"
           name="documents"
-          rows={3}
-          className="mt-1 w-full border rounded px-3 py-2"
-          placeholder="Ex : Passeport, diplômes, relevés de notes, lettre de motivation..."
+          accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
+          onChange={(event) => {
+            updateSelectedFiles(Array.from(event.currentTarget.files ?? []));
+          }}
+          className="block w-full cursor-pointer rounded-lg border border-slate-300 bg-slate-50 text-sm text-slate-700 file:mr-4 file:cursor-pointer file:border-0 file:bg-hohBlue file:px-4 file:py-3 file:font-semibold file:text-white hover:file:bg-blue-800"
         />
+        {selectedFiles.length > 0 && (
+          <ul className="mt-3 space-y-1 text-sm text-slate-600">
+            {selectedFiles.map((file, index) => (
+              <li
+                key={`${file.name}-${index}`}
+                className="flex items-center justify-between gap-3"
+              >
+                <span className="break-all">
+                  {file.name}{" "}
+                  <span className="text-slate-400">
+                    ({(file.size / 1024).toFixed(0)} Ko)
+                  </span>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => removeSelectedFile(index)}
+                  aria-label={`Retirer ${file.name}`}
+                  className="shrink-0 rounded px-2 py-1 text-sm font-medium text-red-600 hover:bg-red-50"
+                >
+                  Retirer
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+        {fileError && (
+          <p role="alert" className="mt-2 text-sm text-red-600">
+            {fileError}
+          </p>
+        )}
       </div>
 
       <button
         type="submit"
-        disabled={status === "loading"}
+        disabled={status === "loading" || Boolean(fileError)}
         className="bg-hohBlue text-white px-5 py-2 rounded font-semibold shadow hover:bg-blue-800 transition-colors"
       >
         {status === "loading" ? "Enregistrement..." : "Enregistrer la demande"}
@@ -214,7 +306,7 @@ export default function StudentForm() {
       )}
       {status === "error" && (
         <p className="text-sm text-red-600 mt-2">
-          Une erreur est survenue. Merci de réessayer.
+          {errorMessage || "Une erreur est survenue. Merci de réessayer."}
         </p>
       )}
     </form>
